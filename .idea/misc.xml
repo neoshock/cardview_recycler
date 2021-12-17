@@ -3,7 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Documentos/Software/Sexto Software/Aplicaciones Moviles/AM TI-4/app/src/main/res/drawable/message_error_img.xml" value="0.26614583333333336" />
+        <entry key="..\:/Documentos/Software/Sexto Software/Aplicaciones Moviles/AM TI-4/app/src/main/res/layout/activity_evaluados.xml" value="0.25" />
         <entry key="..\:/Documentos/Software/Sexto Software/Aplicaciones Moviles/AM TI-4/app/src/main/res/layout/activity_main.xml" value="0.4" />
+        <entry key="..\:/Documentos/Software/Sexto Software/Aplicaciones Moviles/AM TI-4/app/src/main/res/layout/list_evaluados.xml" value="0.1" />
         <entry key="..\:/Documentos/Software/Sexto Software/Aplicaciones Moviles/AM TI-4/app/src/main/res/layout/list_item.xml" value="0.4" />
       </map>
     </option>

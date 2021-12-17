@@ -7,5 +7,5 @@ import retrofit2.http.GET;
 
 public interface EvaluadoresService {
     @GET("listadoevaluadores.php")
-    Call<List<Evaluador>> getEvaluadores();
+    Call<ListaEvaluador> getEvaluadores();
 }

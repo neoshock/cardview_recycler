@@ -3,17 +3,20 @@ package com.example.listview_cardview;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 public class EvaluadorAdapter extends RecyclerView.Adapter<EvaluadorAdapter.ViewHolder> {
 
     private int layout;
-    private List<String> nombres;
+    private List<Evaluador> evaluadores;
     private OnItemClickListener itemClickListener;
 
     @NonNull
@@ -27,38 +30,47 @@ public class EvaluadorAdapter extends RecyclerView.Adapter<EvaluadorAdapter.View
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.bind(nombres.get(position), itemClickListener);
+        holder.bind(evaluadores.get(position), itemClickListener);
     }
 
     @Override
     public int getItemCount() {
-        return nombres.size();
+        return evaluadores.size();
     }
 
-    public EvaluadorAdapter(List<String> nombres, int layout, @NonNull OnItemClickListener listener){
-        this.nombres = nombres;
+    public EvaluadorAdapter(List<Evaluador> evaluadores, int layout, @NonNull OnItemClickListener listener){
+        this.evaluadores = evaluadores;
         this.layout = layout;
         this.itemClickListener = listener;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView nombre;
+        public TextView area;
+        public ImageView imagen;
 
         public  ViewHolder(View view){
             super(view);
             this.nombre = view.findViewById(R.id.nombreEvaluador);
+            this.area = view.findViewById(R.id.areaEvaluador);
+            this.imagen = view.findViewById(R.id.evaluadorImg);
         }
 
         public TextView getTextView() {
             return nombre;
         }
 
-        public void bind(final String nombre, final OnItemClickListener listener){
-            this.nombre.setText(nombre);
+        public void bind(final Evaluador evaluador, final OnItemClickListener listener){
+            this.nombre.setText(evaluador.getNombres());
+            this.area.setText(evaluador.getArea());
+
+            Picasso.get().load(evaluador.getImgjpg()).
+                    error(R.drawable.error_img).into(this.imagen);
+
             itemView.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View view){
-                    listener.onClick(nombre, getAdapterPosition());
+                    listener.onClick(evaluador.getIdevaluador(), getAdapterPosition());
                 }
             });
         }
