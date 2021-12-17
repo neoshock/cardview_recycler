@@ -9,6 +9,7 @@
         android:clickable="true"
         android:layout_width="match_parent"
         android:layout_height="90dp"
+        card_view:cardElevation="6dp"
         card_view:cardCornerRadius="15dp">
 
         <ImageView
