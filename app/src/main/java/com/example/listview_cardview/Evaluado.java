@@ -1,7 +1,7 @@
 package com.example.listview_cardview;
 
 public class Evaluado {
-    private String Nombres, cargo, fechafin,fechainicio,genero,id,idevaluado,imgJPG,imgjpg,situacion;
+    private String Nombres,cargo,fechafin,fechainicio,genero,id,idevaluado,imgJPG,imgjpg,situacion;
 
     public Evaluado(String nombres, String cargo, String fechafin, String fechainicio, String genero, String id, String idevaluado, String imgJPG, String imgjpg, String situacion) {
         Nombres = nombres;
@@ -14,10 +14,6 @@ public class Evaluado {
         this.imgJPG = imgJPG;
         this.imgjpg = imgjpg;
         this.situacion = situacion;
-    }
-
-    public Evaluado() {
-
     }
 
     public String getNombres() {

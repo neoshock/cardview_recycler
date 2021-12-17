@@ -5,9 +5,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -42,6 +45,8 @@ public class EvaluadoAdapter extends RecyclerView.Adapter<EvaluadoAdapter.Evalua
         public TextView cargo;
         public TextView genero;
         public TextView situacion;
+        public TextView fechaInicio;
+        public TextView fechaFin;
         public ImageView imageView;
 
         public EvaluadosViewHolder(View view){
@@ -50,14 +55,29 @@ public class EvaluadoAdapter extends RecyclerView.Adapter<EvaluadoAdapter.Evalua
             this.cargo = view.findViewById(R.id.evaluadoCargo);
             this.genero = view.findViewById(R.id.evaluadoGenero);
             this.situacion = view.findViewById(R.id.evaluadoSituacion);
+
+            this.fechaInicio = view.findViewById(R.id.fechaInicio);
+            this.fechaFin = view.findViewById(R.id.fechaFin);
             this.imageView = view.findViewById(R.id.evaluadoImg);
         }
 
         public void bind(final Evaluado evaluado){
-            this.nombres.setText(evaluado.getNombres());
-            this.cargo.setText(evaluado.getCargo());
-            this.genero.setText(evaluado.getGenero());
-            this.situacion.setText(evaluado.getSituacion());
+            Picasso.get().load(evaluado.getImgjpg()).
+                    error(R.drawable.error_img).
+                    into(this.imageView);
+            this.nombres.setText("Nombres: " + evaluado.getNombres());
+            this.cargo.setText("Cargo: " + evaluado.getCargo());
+            this.genero.setText("Genero: " + evaluado.getGenero());
+            this.situacion.setText("Situacion: " + evaluado.getSituacion());
+            this.fechaFin.setText("Fecha Fin: " + evaluado.getFechafin());
+            this.fechaInicio.setText("Fecha Inicio: " + evaluado.getFechainicio());
+
+            if(evaluado.getFechafin() == null){
+                this.fechaFin.setText("Fecha Fin: Ninguna");
+            }
+            if (evaluado.getFechainicio() == null){
+                this.fechaInicio.setText("Fecha Inicio: Ninguna");
+            }
         }
     }
 }

@@ -56,16 +56,12 @@ public class EvaluadorAdapter extends RecyclerView.Adapter<EvaluadorAdapter.View
             this.imagen = view.findViewById(R.id.evaluadorImg);
         }
 
-        public TextView getTextView() {
-            return nombre;
-        }
-
         public void bind(final Evaluador evaluador, final OnItemClickListener listener){
-            this.nombre.setText(evaluador.getNombres());
-            this.area.setText(evaluador.getArea());
+            this.nombre.setText("Nombres: " + evaluador.getNombres());
+            this.area.setText("Area: " + evaluador.getArea());
 
             Picasso.get().load(evaluador.getImgjpg()).
-                    error(R.drawable.error_img).into(this.imagen);
+                    error(R.drawable.error_img).centerCrop().resize(300,300).into(this.imagen);
 
             itemView.setOnClickListener(new View.OnClickListener(){
                 @Override

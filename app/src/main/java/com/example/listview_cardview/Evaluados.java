@@ -5,10 +5,27 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.widget.Toast;
 
+import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+
+import okhttp3.OkHttpClient;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Evaluados extends AppCompatActivity {
 
@@ -16,11 +33,35 @@ public class Evaluados extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_evaluados);
+        loadDataEvaluados();
     }
 
-    public void loadListEvaluado(){
+    public void loadDataEvaluados(){
+        Bundle bundle = this.getIntent().getExtras();
+        String evaluador = bundle.getString("idevaluador");
 
-        List<Evaluado> evaluados = new ArrayList<>();
+        Retrofit retrofit = new Retrofit.Builder().
+                baseUrl("https://evaladmin.uteq.edu.ec/ws/").
+                client(handleSSLHandshake().build()).
+                addConverterFactory(GsonConverterFactory.create()).build();
+        EvaluadoresService evaluadoresService = retrofit.create(EvaluadoresService.class);
+        Call<ListaEvaluar> callData = evaluadoresService.getEvaluadosByEvaluador(evaluador);
+
+        callData.enqueue(new Callback<ListaEvaluar>() {
+            @Override
+            public void onResponse(Call<ListaEvaluar> call, Response<ListaEvaluar> response) {
+                ListaEvaluar evaluadosResponse = response.body();
+                loadListEvaluado(evaluadosResponse.listaaevaluar);
+            }
+
+            @Override
+            public void onFailure(Call<ListaEvaluar> call, Throwable t) {
+                Toast.makeText(Evaluados.this, t.getMessage().toString(), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    public void loadListEvaluado(List<Evaluado> evaluados){
         RecyclerView recyclerView = findViewById(R.id.listaEvaluados);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
 
@@ -29,5 +70,47 @@ public class Evaluados extends AppCompatActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(evaluadoAdapter);
+    }
+
+    @SuppressLint("TrulyRandom")
+    public static OkHttpClient.Builder handleSSLHandshake() {
+        try {
+            // Create a trust manager that does not validate certificate chains
+            final TrustManager[] trustAllCerts = new TrustManager[]{
+                    new X509TrustManager() {
+                        @Override
+                        public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
+                        }
+
+                        @Override
+                        public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
+                        }
+
+                        @Override
+                        public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                            return new java.security.cert.X509Certificate[]{};
+                        }
+                    }
+            };
+
+            // Install the all-trusting trust manager
+            final SSLContext sslContext = SSLContext.getInstance("SSL");
+            sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
+
+            // Create an ssl socket factory with our all-trusting manager
+            final SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
+
+            OkHttpClient.Builder builder = new OkHttpClient.Builder();
+            builder.sslSocketFactory(sslSocketFactory, (X509TrustManager) trustAllCerts[0]);
+            builder.hostnameVerifier(new HostnameVerifier() {
+                @Override
+                public boolean verify(String hostname, SSLSession session) {
+                    return true;
+                }
+            });
+            return builder;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

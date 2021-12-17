@@ -6,7 +6,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.Toast;
 
 import java.security.SecureRandom;
@@ -68,12 +71,27 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView.Adapter evaluadorAdapter = new EvaluadorAdapter(evaluadors,R.layout.list_item, new EvaluadorAdapter.OnItemClickListener() {
             @Override
             public void onClick(String view, int position){
-                Toast.makeText(MainActivity.this, view, Toast.LENGTH_LONG).show();
+                seleccionarEvaluador(view);
             }
         });
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(evaluadorAdapter);
+    }
+
+    private void seleccionarEvaluador(String evaluadorId){
+        Bundle bundle = new Bundle();
+
+        Intent intent = new Intent(MainActivity.this, Evaluados.class);
+
+        //Agregamos los campos ingresados en los Inputs al bundle
+        bundle.putString("idevaluador", evaluadorId);
+
+        //Ingresamos la coleccion de datos al intent
+        intent.putExtras(bundle);
+
+        //Llamada a a la siguiente actividad
+        startActivity(intent);
     }
 
     @SuppressLint("TrulyRandom")
