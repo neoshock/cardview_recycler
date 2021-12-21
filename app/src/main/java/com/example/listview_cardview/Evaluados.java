@@ -41,8 +41,7 @@ public class Evaluados extends AppCompatActivity {
         String evaluador = bundle.getString("idevaluador");
 
         Retrofit retrofit = new Retrofit.Builder().
-                baseUrl("https://evaladmin.uteq.edu.ec/ws/").
-                client(handleSSLHandshake().build()).
+                baseUrl("https://www.uealecpeterson.net/ws/").
                 addConverterFactory(GsonConverterFactory.create()).build();
         EvaluadoresService evaluadoresService = retrofit.create(EvaluadoresService.class);
         Call<ListaEvaluar> callData = evaluadoresService.getEvaluadosByEvaluador(evaluador);
@@ -70,47 +69,5 @@ public class Evaluados extends AppCompatActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(evaluadoAdapter);
-    }
-
-    @SuppressLint("TrulyRandom")
-    public static OkHttpClient.Builder handleSSLHandshake() {
-        try {
-            // Create a trust manager that does not validate certificate chains
-            final TrustManager[] trustAllCerts = new TrustManager[]{
-                    new X509TrustManager() {
-                        @Override
-                        public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
-                        }
-
-                        @Override
-                        public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
-                        }
-
-                        @Override
-                        public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-                            return new java.security.cert.X509Certificate[]{};
-                        }
-                    }
-            };
-
-            // Install the all-trusting trust manager
-            final SSLContext sslContext = SSLContext.getInstance("SSL");
-            sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
-
-            // Create an ssl socket factory with our all-trusting manager
-            final SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
-
-            OkHttpClient.Builder builder = new OkHttpClient.Builder();
-            builder.sslSocketFactory(sslSocketFactory, (X509TrustManager) trustAllCerts[0]);
-            builder.hostnameVerifier(new HostnameVerifier() {
-                @Override
-                public boolean verify(String hostname, SSLSession session) {
-                    return true;
-                }
-            });
-            return builder;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 }
