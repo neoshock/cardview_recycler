@@ -11,6 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Listview_cardview">
+
         <activity
             android:name=".Evaluados"
             android:exported="false" />

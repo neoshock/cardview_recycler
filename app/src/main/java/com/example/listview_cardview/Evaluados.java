@@ -64,7 +64,7 @@ public class Evaluados extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.listaEvaluados);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
 
-        RecyclerView.Adapter evaluadoAdapter = new EvaluadoAdapter(evaluados, R.layout.list_evaluados);
+        RecyclerView.Adapter evaluadoAdapter = new EvaluadoAdapter(evaluados, R.layout.list_evaluados, this);
 
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setLayoutManager(layoutManager);

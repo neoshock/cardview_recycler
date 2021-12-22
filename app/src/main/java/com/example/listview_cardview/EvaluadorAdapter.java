@@ -1,5 +1,6 @@
 package com.example.listview_cardview;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -18,6 +20,7 @@ public class EvaluadorAdapter extends RecyclerView.Adapter<EvaluadorAdapter.View
     private int layout;
     private List<Evaluador> evaluadores;
     private OnItemClickListener itemClickListener;
+    private Context context;
 
     @NonNull
     @Override
@@ -30,7 +33,7 @@ public class EvaluadorAdapter extends RecyclerView.Adapter<EvaluadorAdapter.View
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.bind(evaluadores.get(position), itemClickListener);
+        holder.bind(evaluadores.get(position), itemClickListener, this.context);
     }
 
     @Override
@@ -38,10 +41,11 @@ public class EvaluadorAdapter extends RecyclerView.Adapter<EvaluadorAdapter.View
         return evaluadores.size();
     }
 
-    public EvaluadorAdapter(List<Evaluador> evaluadores, int layout, @NonNull OnItemClickListener listener){
+    public EvaluadorAdapter(List<Evaluador> evaluadores, int layout, @NonNull OnItemClickListener listener, Context context){
         this.evaluadores = evaluadores;
         this.layout = layout;
         this.itemClickListener = listener;
+        this.context = context;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -56,12 +60,14 @@ public class EvaluadorAdapter extends RecyclerView.Adapter<EvaluadorAdapter.View
             this.imagen = view.findViewById(R.id.evaluadorImg);
         }
 
-        public void bind(final Evaluador evaluador, final OnItemClickListener listener){
+        public void bind(final Evaluador evaluador, final OnItemClickListener listener, Context context){
             this.nombre.setText("Nombres: " + evaluador.getNombres());
             this.area.setText("Area: " + evaluador.getArea());
 
-            Picasso.get().load(evaluador.getImgjpg()).
-                    error(R.drawable.error_img).centerCrop().resize(300,300).into(this.imagen);
+            /*Picasso.get().load(evaluador.getImgjpg()).
+                    error(R.drawable.error_img).centerCrop().resize(300,300).into(this.imagen);*/
+
+            Glide.with(context).load(evaluador.getImgjpg()).placeholder(R.drawable.error_img).into(imagen);
 
             itemView.setOnClickListener(new View.OnClickListener(){
                 @Override

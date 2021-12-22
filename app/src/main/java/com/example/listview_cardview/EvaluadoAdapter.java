@@ -1,5 +1,6 @@
 package com.example.listview_cardview;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -16,6 +18,7 @@ import java.util.List;
 public class EvaluadoAdapter extends RecyclerView.Adapter<EvaluadoAdapter.EvaluadosViewHolder> {
     private int layout;
     private List<Evaluado> evaluados;
+    private Context context;
 
     @NonNull
     @Override
@@ -26,7 +29,7 @@ public class EvaluadoAdapter extends RecyclerView.Adapter<EvaluadoAdapter.Evalua
 
     @Override
     public void onBindViewHolder(@NonNull EvaluadosViewHolder holder, int position) {
-        holder.bind(evaluados.get(position));
+        holder.bind(evaluados.get(position), this.context);
     }
 
     @Override
@@ -34,9 +37,10 @@ public class EvaluadoAdapter extends RecyclerView.Adapter<EvaluadoAdapter.Evalua
         return evaluados.size();
     }
 
-    public EvaluadoAdapter(List<Evaluado> evaluados, int layout){
+    public EvaluadoAdapter(List<Evaluado> evaluados, int layout, Context context){
         this.evaluados = evaluados;
         this.layout = layout;
+        this.context = context;
     }
 
     public static class EvaluadosViewHolder extends RecyclerView.ViewHolder {
@@ -60,16 +64,19 @@ public class EvaluadoAdapter extends RecyclerView.Adapter<EvaluadoAdapter.Evalua
             this.imageView = view.findViewById(R.id.evaluadoImg);
         }
 
-        public void bind(final Evaluado evaluado){
-            Picasso.get().load(evaluado.getImgjpg()).
+        public void bind(final Evaluado evaluado, Context context){
+            /*Picasso.get().load(evaluado.getImgjpg()).
                     error(R.drawable.error_img).
-                    into(this.imageView);
+                    into(this.imageView);*/
+
             this.nombres.setText("Nombres: " + evaluado.getNombres());
             this.cargo.setText("Cargo: " + evaluado.getCargo());
             this.genero.setText("Genero: " + evaluado.getGenero());
             this.situacion.setText("Situacion: " + evaluado.getSituacion());
             this.fechaFin.setText("Fecha Fin: " + evaluado.getFechafin());
             this.fechaInicio.setText("Fecha Inicio: " + evaluado.getFechainicio());
+
+            Glide.with(context).load(evaluado.getImgjpg()).placeholder(R.drawable.error_img).into(imageView);
 
             if(evaluado.getFechafin() == null){
                 this.fechaFin.setText("Fecha Fin: Ninguna");

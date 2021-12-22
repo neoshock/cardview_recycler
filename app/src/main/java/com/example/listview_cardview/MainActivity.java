@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(String view, int position){
                 seleccionarEvaluador(view);
             }
-        });
+        }, this);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(evaluadorAdapter);
